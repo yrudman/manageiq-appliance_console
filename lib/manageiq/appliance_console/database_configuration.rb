@@ -231,6 +231,24 @@ FRIENDLY
       end
     end
 
+=begin ORIGINAL
+    def validated
+      !!validate!
+    rescue => err
+      log_error(__method__, err.message)
+      say_error(__method__, err.message)
+      false
+    end
+
+    def validate!
+      pool = ModelWithNoBackingTable.establish_connection(settings_hash.delete_if { |_n, v| v.blank? })
+      begin
+        pool.connection
+      ensure
+        ModelWithNoBackingTable.remove_connection
+      end
+    end
+=end
     def start_evm
       pid = fork do
         begin
